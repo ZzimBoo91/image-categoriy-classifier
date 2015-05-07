@@ -17,6 +17,7 @@ from EvenImageDivider import EvenImageDivider
 from BagOfWordsVectorCalculator import BagOfWordsVectorCalculator
 from AveragePrecisionCalculator import AveragePrecisionCalculator
 from CommonHelperFunctions import CommonHelperFunctions
+from DenseFeatureExtractor import DenseFeatureExtractor
 
 # Private helper functions
 
@@ -52,9 +53,9 @@ def __calculate_merged_histogram(image,numberOfSectors):
     dividedImage=EvenImageDivider(image,numberOfSectors)
     for i in xrange(1,(dividedImage.n + 1)):
         sectorOfFeatures = __get_image_features_memory(dividedImage.divider(i))
-        if sectorOfFeatures == None:
-            bowCalculator.emptyMergedBow()
-            return
+        #if sectorOfFeatures == None:
+            #bowCalculator.emptyMergedBow()
+            #return
         bow = histCalculator.hist(sectorOfFeatures)
         bowCalculator.createMergedBow(bow)
 
@@ -218,6 +219,8 @@ def evaluating(path, vocab_file, classifier_file, dictionary_file):
                         print imgName
                         image = commHelperFunc.load_image(i[0])
                         __calculate_merged_histogram(image,4)
+                        #if bowCalculator.getMergedBow() == None:
+                            #continue
                         bow = commHelperFunc.from_array_to_matrix(bowCalculator.getMergedBow())
                         bow = bowCalculator.getMergedBow()
                         totalPredictions += 1
@@ -276,9 +279,8 @@ def training(path, output_file, vocab_file, dictionary_output_file):
                         print imgfile
 
                         __calculate_merged_histogram(image, 4)
-
-                        if bowCalculator.getMergedBow() == None:
-                            continue
+                        #if bowCalculator.getMergedBow() == None:
+                            #continue
             
                         bow = commHelperFunc.from_array_to_matrix(bowCalculator.getMergedBow())
                         bowCalculator.createBowVector(bow)
@@ -354,7 +356,7 @@ def training(path, output_file, vocab_file, dictionary_output_file):
         __save_classifier(output_file)
         if not csvMode and not csvReferencesImages:
             __save_categories_dictionary(dictionary_output_file)
-            print "Value = ", value
+            #print "Value = ", value
 
     except Exception, Argument:
         print "Exception happened: ", Argument
