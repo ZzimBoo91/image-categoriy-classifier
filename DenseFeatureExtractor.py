@@ -1,5 +1,6 @@
 from vlfeat import vl_dsift, vl_imsmooth, vl_rgb2gray
 from cv2 import imread, resize, equalizeHist
+from numpy import transpose
 
 class DenseFeatureExtractor:
 
@@ -14,9 +15,11 @@ class DenseFeatureExtractor:
 		histEqualizedImage = equalizeHist(grayScaleImg)
 		sizeOfSpatialBins = 3 #binSize, i.e. 3x3 region
 		step = 10
-		fast = True #if set to True it uses a flat window rather than a Gaussian window
-		verbose = norm = False
+		fast = False #if set to True it uses a flat window rather than a Gaussian window
+		verbose = True
+		norm = False
 		bounds = -1
 		[frames,descriptors] = vl_dsift(histEqualizedImage,step,bounds,sizeOfSpatialBins,fast,verbose,norm)
+		descriptors = descriptors.transpose()
 		return descriptors.astype('float32')
 
