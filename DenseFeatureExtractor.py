@@ -13,7 +13,7 @@ class DenseFeatureExtractor:
 		imgResized = resize(img, (300,250))
 		grayScaleImg = vl_rgb2gray(imgResized).astype('uint8')
 		histEqualizedImage = equalizeHist(grayScaleImg)
-		sizeOfSpatialBins = 3 #binSize, i.e. 3x3 region
+		sizeOfSpatialBins = 8
 		step = 10
 		fast = False #if set to True it uses a flat window rather than a Gaussian window
 		verbose = True
