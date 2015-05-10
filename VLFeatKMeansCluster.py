@@ -16,14 +16,7 @@ class VLFeatKMeansCluster:
 
     def cluster(self):
         self.vector = self.vector.transpose()
-        print "2eddy", len(self.vector)==128
-        print "rows da5elo", len(self.vector)
-        print "cols da5elo", len(self.vector[0])
         centers, _ = vl_ikmeans(self.vector, self.clusters_count,200, method='lloyd', verbose=0)
-        #print "el rows now teb2a el mafrud 128", len(centers)
-        #print "el cols now teb2a el mafrud 100", len(centers[0])
-        #OpenCVKMeansCluster
-        #VLFeatKMeansCluster
         return centers.transpose()
 
 
