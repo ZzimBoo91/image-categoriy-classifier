@@ -1,12 +1,12 @@
 import numpy as np
 import cv2 as cv
 
-class KMeanCluster:
+class OpenCVKMeansCluster:
 
     def __init__(self, clusters_count):
         self.clusters_count = clusters_count
         self.vector = None 
-        
+    
     def add_to_cluster(self, vector):
         if self.vector == None:
             self.vector = vector

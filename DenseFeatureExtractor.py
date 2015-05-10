@@ -1,6 +1,7 @@
 from vlfeat import vl_dsift, vl_imsmooth, vl_rgb2gray
 from cv2 import imread, resize, equalizeHist
 from numpy import transpose
+import operator
 
 class DenseFeatureExtractor:
 
@@ -19,7 +20,6 @@ class DenseFeatureExtractor:
 		verbose = True
 		norm = False
 		bounds = -1
-		[frames,descriptors] = vl_dsift(histEqualizedImage,step,bounds,sizeOfSpatialBins,fast,verbose,norm)
-		descriptors = descriptors.transpose()
-		return descriptors.astype('float32')
+		_ ,descriptors = vl_dsift(histEqualizedImage,step,bounds,sizeOfSpatialBins,fast,verbose,norm)
+		return descriptors.transpose().astype('float32')
 

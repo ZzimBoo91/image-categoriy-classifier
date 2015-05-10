@@ -8,7 +8,6 @@ import cv2, csv
 
 from FeatureExtractorFactory import FeatureExtractorFactory
 from Image import Image
-from KMeanCluster import KMeanCluster
 from SIFTManager import SIFTManager
 from HistogramCalculator import HistogramCalculator
 from ClassifierFactory import ClassifierFactory
@@ -18,6 +17,7 @@ from BagOfWordsVectorCalculator import BagOfWordsVectorCalculator
 from AveragePrecisionCalculator import AveragePrecisionCalculator
 from CommonHelperFunctions import CommonHelperFunctions
 from DenseFeatureExtractor import DenseFeatureExtractor
+from ClusteringFactory import ClusteringFactory
 
 # Private helper functions
 
@@ -113,7 +113,7 @@ def vocabulary(path, output_file):
     csvReferencesImages = False
     count = 0
     global cluster
-    cluster = KMeanCluster(100)
+    cluster = ClusteringFactory.newInstance(100) 
     for i in os.listdir(path):
         if i.endswith(".jpg") or i.endswith(".png"):
             try:
