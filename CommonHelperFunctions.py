@@ -3,6 +3,7 @@ from sklearn.preprocessing import label_binarize
 import numpy as np
 import getopt, sys, os, traceback
 import cv2, csv
+from random import randrange
 
 class CommonHelperFunctions:
 	def __init__(self):
@@ -53,5 +54,23 @@ class CommonHelperFunctions:
 
 	def belongs_to_class(self,instance,correctClass):
 		return instance.__class__.__name__ == correctClass
+
+	def get_csv_file_as_array(self,path,fileName):
+		fullPathCsvFile = ("%s/%s" % (path, fileName))
+		csvFile = open(fullPathCsvFile)
+		lines = csvFile.readlines()
+		counter = 0
+		for line in lines:
+			lines[counter] = line.rstrip()
+			counter += 1
+		return lines
+
+	def get_n_random_image_paths(self,path,fileName,n):
+		allLines = self.get_csv_file_as_array(path,fileName)
+		result = []
+		for i in range(0,n):
+			randomIndex = randrange(0, len(allLines))
+			result.insert(len(result),allLines[randomIndex])
+		return result
 
 

@@ -105,9 +105,17 @@ def __get_image_features_and_cluster_from_csv(path,fileName):
             vector = __get_image_features(i[0])
             cluster.add_to_cluster(vector)
 
+def __get_image_features_from_list_of_paths_and_cluster(listOfPaths):
+    for i in range(0,len(listOfPaths)):
+        imgfile = commHelperFunc.get_image_name_from_path(listOfPaths[i])
+        print imgfile
+        vector = __get_image_features(listOfPaths[i])
+        cluster.add_to_cluster(vector)
+
 # Main functions
 
 def vocabulary(path, output_file):
+    pascalRandomness = True
     __init__common_helper_functions()
     commHelperFunc.check_dir_condition(path)
     csvReferencesImages = False
@@ -133,7 +141,11 @@ def vocabulary(path, output_file):
         for i in os.listdir(path):
             if i.endswith(".csv"):
                 try:
-                    __get_image_features_and_cluster_from_csv(path,i)
+                    if not pascalRandomness:
+                        __get_image_features_and_cluster_from_csv(path,i)
+                    else:
+                        listOfRandomPaths = commHelperFunc.get_n_random_image_paths(path,i,25)
+                        __get_image_features_from_list_of_paths_and_cluster(listOfRandomPaths)
                 except Exception, Argument:
                     print "Exception happened: ", Argument
     if count > 0 or csvReferencesImages:
