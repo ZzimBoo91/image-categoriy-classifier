@@ -12,7 +12,7 @@ class SVMClassifierScikit(Classifier):
 
 	def train(self):
 		try:
-			return self.classifier.fit(self.trainingData, self.trainingLabels)
+			return self.classifier.fit(self.trainingData, self.trainingLabels, class_weight=Auto)
 		except Exception, Argument:
 			print "Exception happened: ", Argument
 			traceback.print_stack()
