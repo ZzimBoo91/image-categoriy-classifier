@@ -17,9 +17,9 @@ class DenseFeatureExtractor:
 		sizeOfSpatialBins = 8
 		step = 10
 		fast = False #if set to True it uses a flat window rather than a Gaussian window
-		verbose = True
+		verbose = False
 		norm = False
 		bounds = -1
-		_ ,descriptors = vl_dsift(histEqualizedImage,step,bounds,sizeOfSpatialBins,fast,verbose,norm)
+		[frames ,descriptors] = vl_dsift(histEqualizedImage,step,bounds,sizeOfSpatialBins,fast,verbose,norm)
 		return descriptors.transpose().astype('float32')
 
