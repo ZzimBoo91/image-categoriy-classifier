@@ -67,14 +67,10 @@ class CommonHelperFunctions:
 
 	def get_n_random_image_paths(self,path,fileName,n):
 		allLines = self.get_csv_file_as_array(path,fileName)
-		#print "All Lines = ", allLines
 		randomIndeces = sample(range(0, len(allLines)), n)
-		#print "Random Indeces = ", randomIndeces
 		result = []
 		for i in range(0,len(randomIndeces)):
-			#result.insert(len(result),allLines[i])
 			result.insert(len(result),allLines[randomIndeces[i]])
-			#print "Inserted : ", allLines[i]
 		return result
 
 	def get_list_difference(self,list1,list2):
