@@ -3,7 +3,7 @@ from sklearn.preprocessing import label_binarize
 import numpy as np
 import getopt, sys, os, traceback
 import cv2, csv
-from random import randrange
+from random import sample
 
 class CommonHelperFunctions:
 	def __init__(self):
@@ -67,10 +67,30 @@ class CommonHelperFunctions:
 
 	def get_n_random_image_paths(self,path,fileName,n):
 		allLines = self.get_csv_file_as_array(path,fileName)
+		#print "All Lines = ", allLines
+		randomIndeces = sample(range(0, len(allLines)), n)
+		#print "Random Indeces = ", randomIndeces
 		result = []
-		for i in range(0,n):
-			randomIndex = randrange(0, len(allLines))
-			result.insert(len(result),allLines[randomIndex])
+		for i in range(0,len(randomIndeces)):
+			#result.insert(len(result),allLines[i])
+			result.insert(len(result),allLines[randomIndeces[i]])
+			#print "Inserted : ", allLines[i]
 		return result
+
+	def get_list_difference(self,list1,list2):
+		result = []
+		for i,v in enumerate(list1):
+			if v in list2:
+				continue
+			else:
+				result.insert(len(result),v)
+		return result
+
+	def save_array_contents_as_csv(self,fileNameWrite,array):
+		with open(fileNameWrite, 'w') as fileWriter:
+			catWriter = csv.writer(fileWriter, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+			for i in range(0,len(array)):
+				catWriter.writerow([array[i]])
+
 
 

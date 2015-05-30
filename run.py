@@ -5,6 +5,7 @@ from sklearn.preprocessing import label_binarize
 import numpy as np
 import getopt, sys, os, traceback
 import cv2, csv
+from math import ceil
 
 from FeatureExtractorFactory import FeatureExtractorFactory
 from Image import Image
@@ -259,6 +260,8 @@ def evaluating(path, vocab_file, classifier_file, dictionary_file):
         print "Average Precision Score for class '%s' = " % (averagePrecisionCalc.get_evaluated_category_names())[i], averagePrecisionCalc.calculate_average_precision_score(y_true,y_score)
     print "Mean Average Precision Result::"
     print "Mean Average Precision (MAP) = ", averagePrecisionCalc.calculate_map()
+
+
     
 def training(path, output_file, vocab_file, dictionary_output_file):
     __init__common_helper_functions()
@@ -267,6 +270,7 @@ def training(path, output_file, vocab_file, dictionary_output_file):
     __init_histogram_calculator(vocab_file)
     __init_bow_vector_calculator()
     csvMode = csvReferencesImages = False
+    EightyTwentySplit = True
     label = 0
     labelsVector = None
     global classesHashtable 
@@ -329,26 +333,50 @@ def training(path, output_file, vocab_file, dictionary_output_file):
                     categoryName = commHelperFunc.get_category_name_from_file_name(f)
                     print ("Training label '%s'" % categoryName)
                     correctLabel = classesHashtable.getClassNumber(categoryName)
-                    with open (("%s/%s" % (path, f))) as fileReader:
-                        reader = csv.reader(fileReader, delimiter=' ')
-                        for i in reader:
-                            imgName = commHelperFunc.get_image_name_from_path(i[0])
+                    if not EightyTwentySplit:
+                        with open (("%s/%s" % (path, f))) as fileReader:
+                            reader = csv.reader(fileReader, delimiter=' ')
+                            for i in reader:
+                                imgName = commHelperFunc.get_image_name_from_path(i[0])
+                                print imgName
+                                image = commHelperFunc.load_image(i[0])
+                                __calculate_merged_histogram(image, 4)
+                                
+                                if bowCalculator.getMergedBow() == None:
+                                    value += 1
+                                    continue
+                                
+                                bow = commHelperFunc.from_array_to_matrix(bowCalculator.getMergedBow())
+                                bowCalculator.createBowVector(bow)
+
+                                if labelsVector == None:
+                                    labelsVector = np.array(correctLabel)
+                                else:
+                                    labelsVector = np.insert(labelsVector, labelsVector.size, correctLabel)
+                                bowCalculator.emptyMergedBow()
+                    
+                    else:
+                        fullPathCsvFile = ("%s/%s" % (path, f))
+                        totalNumberOfImages = commHelperFunc.file_len(fullPathCsvFile)
+                        eightyPercent = int(ceil((totalNumberOfImages/float(100))*80))
+                        listOfRandomPathsEightyPercent = commHelperFunc.get_n_random_image_paths(path,f,eightyPercent)
+                        originalList = commHelperFunc.get_csv_file_as_array(path,f)
+                        listOfRandomPathsTwentyPercent = commHelperFunc.get_list_difference(originalList,listOfRandomPathsEightyPercent)
+                        commHelperFunc.save_array_contents_as_csv(fullPathCsvFile,listOfRandomPathsTwentyPercent)
+                        
+                        for i in range(0,len(listOfRandomPathsEightyPercent)):
+                            imgName = commHelperFunc.get_image_name_from_path(listOfRandomPathsEightyPercent[i])
                             print imgName
-                            image = commHelperFunc.load_image(i[0])
+                            image = commHelperFunc.load_image(listOfRandomPathsEightyPercent[i])
                             __calculate_merged_histogram(image, 4)
-                            
-                            if bowCalculator.getMergedBow() == None:
-                                value += 1
-                                continue
-                            
                             bow = commHelperFunc.from_array_to_matrix(bowCalculator.getMergedBow())
                             bowCalculator.createBowVector(bow)
-
                             if labelsVector == None:
                                 labelsVector = np.array(correctLabel)
                             else:
                                 labelsVector = np.insert(labelsVector, labelsVector.size, correctLabel)
                             bowCalculator.emptyMergedBow()
+
                 except Exception, Argument:
                     print "Exception happened: ", Argument
                     traceback.print_stack() 

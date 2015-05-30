@@ -6,13 +6,13 @@ from sklearn.externals import joblib
 class SVMClassifierScikit(Classifier):
 
 	def __init__(self):
-		self.classifier = svm.LinearSVC()
+		self.classifier = svm.LinearSVC(class_weight='auto')
 		self.setErrorCount(0)
 		self.setEvaluationsCount(0)
 
 	def train(self):
 		try:
-			return self.classifier.fit(self.trainingData, self.trainingLabels, class_weight=Auto)
+			return self.classifier.fit(self.trainingData, self.trainingLabels)
 		except Exception, Argument:
 			print "Exception happened: ", Argument
 			traceback.print_stack()
