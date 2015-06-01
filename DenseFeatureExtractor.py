@@ -20,6 +20,6 @@ class DenseFeatureExtractor:
 		verbose = False
 		norm = False
 		bounds = -1
-		[frames ,descriptors] = vl_dsift(histEqualizedImage,step,bounds,sizeOfSpatialBins,fast,verbose,norm)
+		frames ,descriptors = vl_dsift(histEqualizedImage,step,bounds,sizeOfSpatialBins,fast,verbose,norm)
 		return descriptors.transpose().astype('float32')
 

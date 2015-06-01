@@ -16,7 +16,7 @@ class VLFeatKMeansCluster:
 
     def cluster(self):
         self.vector = self.vector.transpose()
-        centers, _ = vl_ikmeans(self.vector, self.clusters_count,200, method='lloyd', verbose=0)
+        centers, _ = vl_ikmeans(self.vector, self.clusters_count,method='elkan', verbose=0)
         return centers.transpose()
 
 

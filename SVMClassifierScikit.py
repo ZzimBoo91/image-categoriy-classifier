@@ -1,12 +1,15 @@
 from Classifier import Classifier
 import traceback
 from sklearn import svm
+from sklearn import grid_search
 from sklearn.externals import joblib
 
 class SVMClassifierScikit(Classifier):
 
 	def __init__(self):
+		parameters = {'C':[1, 10]}
 		self.classifier = svm.LinearSVC(class_weight='auto')
+		self.classifier = grid_search.GridSearchCV(self.classifier, parameters)
 		self.setErrorCount(0)
 		self.setEvaluationsCount(0)
 
