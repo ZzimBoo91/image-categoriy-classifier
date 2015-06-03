@@ -8,7 +8,7 @@ class SVMClassifierScikit(Classifier):
 
 	def __init__(self):
 		parameters = {'C':[1, 10]}
-		self.classifier = svm.LinearSVC(class_weight='auto')
+		self.classifier = svm.SVC(class_weight='auto',kernel='linear')
 		self.classifier = grid_search.GridSearchCV(self.classifier, parameters)
 		self.setErrorCount(0)
 		self.setEvaluationsCount(0)

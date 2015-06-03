@@ -122,7 +122,7 @@ def vocabulary(path, output_file):
     csvReferencesImages = False
     count = 0
     global cluster
-    cluster = ClusteringFactory.newInstance(100) 
+    cluster = ClusteringFactory.newInstance(1000) 
     for i in os.listdir(path):
         if i.endswith(".jpg") or i.endswith(".png"):
             try:
